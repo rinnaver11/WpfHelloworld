@@ -22,19 +22,21 @@ namespace WpfHelloworld
             InitializeComponent();
         }
 
-        Dictionary<string, string> users = new Dictionary<string, string>()
-        {
-            { "login", "12345" }
-        };
-
-        string LoginAttempt(string login, string passwd)
-        {
-            return users.TryGetValue(login, out passwd) ? "Login successful!" : "User not found!";
-        }
 
         private void LoginClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(LoginAttempt(loginTextBox.Text, passwdTextBox.Text));
+            //MessageBox.Show(LoginAttempt(loginTextBox.Text, passwdTextBox.Text));
+
+            Dictionary<string, string> users = new Dictionary<string, string>() { { "login", "12345" } };
+            string filePath = "dictionary.xml";
+
+            DatabaseHandler database = new DatabaseHandler(filePath);
+
+            database.SaveDictionary(users);
+
+            RequestHandler handler = new RequestHandler(database);
+
+            MessageBox.Show(handler.LoginAttempt(loginTextBox.Text, passwdTextBox.Text));
         }
     }
 }
